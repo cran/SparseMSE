@@ -2,45 +2,50 @@
 % Please edit documentation in R/routines.R
 \name{estimatepopulation}
 \alias{estimatepopulation}
-\title{Estimate the total population including the dark figure}
+\title{Bootstrapping to evaluate confidence intervals using BCa methods}
 \usage{
-estimatepopulation(zdat, method = "stepwise", quantiles = c(0.025,
-  0.975), mX = NULL, pthresh = 0.001)
+estimatepopulation(zdat, nboot = 1000, pthresh = 0.02, iseed = 1234,
+  alpha = c(0.025, 0.05, 0.1, 0.16, 0.84, 0.9, 0.95, 0.975), ...)
 }
 \arguments{
 \item{zdat}{Data matrix with \eqn{t+1} columns. The first \eqn{t} columns, each corresponding to a particular list,
 are 0s and 1s defining the capture histories
 observed. The last column is the count of cases with that particular capture history.
 List names A, B, ... are constructed if not supplied. Where a capture history is not explicitly listed,
-it is assumed that it has observed count zero.}
+it is assumed that it has zero count.}
 
-\item{method}{If \code{method = "stepwise"} the stepwise method implemented in \code{\link{stepwisefit}} is used.  If \code{method = "fixed"} then a specified fixed model is used; the model is then given by \code{mX}.  If \code{method = "main"} then main effects only are fitted.}
+\item{nboot}{Number of bootstrap replications.}
 
-\item{quantiles}{Quantiles of interest for confidence intervals.}
+\item{pthresh}{p-value threshold used in \code{\link{estimatepopulation.0}}.}
 
-\item{mX}{A \eqn{2 \times k} matrix giving the \eqn{k} two-list interactions to be included in the model if \code{method = "fixed"}.
-Each column of \code{mX} contains the numbers of the corresponding pair of lists.
-If \code{mX = 0}, then all two-list interactions are included. If \code{mX = NULL}, no interactions are included and
- the main effects model is fitted.
-If only one interaction is to be fitted, it is ok to specify it as a vector of length 2, e.g \code{mX=c(1,3)}
-for interactions of list 1 and 3.   If \code{method} is equal to \code{"stepwise"} or \code{"fixed"} then \code{mX} is ignored.}
+\item{iseed}{seed for initialisation.}
 
-\item{pthresh}{Threshold p-value used if \code{method = "stepwise"}.}
+\item{alpha}{Bootstrap quantiles of interests.}
+
+\item{...}{other arguments which will be passed to \code{\link{estimatepopulation.0}}}
 }
 \value{
-A list of components as below
+A list with components as below:
 
-\code{estimate} Point estimate and confidence interval estimates corresponding to specified quantiles.
+\code{popest}  point estimate of the total population of the original data set
 
-\code{MSEfit} The model fitted to the data in the format described in \code{\link{modelfit}}.
+\code{MSEfit} model fitted to the data, in the format described in \code{\link{modelfit}}
+
+\code{bootreps} point estimates of total population sizes from each bootstrap sample
+
+\code{ahat} the estimated acceleration factor
+
+\code{BCaquantiles} BCa confidence intervals
 }
 \description{
-This routine calculates the estimate of the total population, including the dark figure, together with confidence intervals as specified.  It also returns the details of the fitted model.
+This routine implements the bootstrapping and jacknife approach as detailed in Section 3.3 of Chan, Silverman and Vincent (2019).
+ It calls the routine \code{\link{estimatepopulation.0}} and so is the preferred routine to be called if a user wishes to estimate the
+  population and obtain BCa confidence intervals.
 }
-\examples{
-data(NewOrl)
-data(NewOrl_5)
-estimatepopulation(NewOrl, method="stepwise", quantiles=c(0.025,0.975))
-estimatepopulation(NewOrl_5, method="main", quantiles=c(0.01, 0.05,0.95, 0.99))
+\references{
+Chan, L., Silverman, B. W., and Vincent, K. (2019).
+ Multiple Systems Estimation for Sparse Capture Data: Inferential Challenges when there are Non-Overlapping Lists.
+  Available from \url{https://arxiv.org/abs/1902.05156}.
 
+DiCiccio, T. J. and Efron, B. (1996). Bootstrap Confidence Intervals. \emph{Statistical Science}, \strong{40(3)}, 189-228.
 }

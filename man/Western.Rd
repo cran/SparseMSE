@@ -9,8 +9,8 @@
 Western
 }
 \description{
-These data are collected into 5 lists. For reasons of confidentiality the labels of the lists are anonymised. Fuller details are
- given in Farrell, Dank, Kfafian, Lockwood, Pfeffer, Hughes, Vincent (2019).
+These data are collected into 5 lists. For reasons of confidentiality the lists are only labelled as A, B, C, D and E. Full details are
+ given in Farrell, Dank, Kfafian, Lockwood, Pfeffer, Hughes and Vincent (2019).
 }
 \references{
 Farrell, A., Dank, M., Kfafian, M., Lockwood, S., Pfeffer, R., Hughes, A., and Vincent, K. (2019).

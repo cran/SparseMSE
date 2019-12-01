@@ -11,25 +11,29 @@ buildmodel(zdat, mX)
 are 0s and 1s defining the capture histories
 observed. The last column is the count of cases with that particular capture history.
 List names A, B, ... are constructed if not supplied. Where a capture history is not explicitly listed,
-it is assumed that it has observed count zero.}
+it is assumed that it has zero counts.}
 
-\item{mX}{A \eqn{2 \times k} matrix giving the \eqn{k} two-list interactions to be included in the model.
+\item{mX}{A \eqn{2 \times k} matrix giving the \eqn{k} two-list effects to be included in the model.
 Each column of \code{mX} contains the numbers of the corresponding pair of lists.
-If \code{mX = 0}, then all two-list interactions are included. If \code{mX = NULL}, no interactions are included and
+If \code{mX = 0}, then all two-list effects are included. If \code{mX = NULL}, no such effects are included and
  the main effects model is fitted.}
 }
 \value{
 A list with components as below.
 
- \code{datamatrix} A matrix with all possible capture histories, other than those corresponding to empty overlaps
- within the model.  An empty overlap is a pair of lists \eqn{(i,j)} such that no case is observed in both lists,
+ \code{datamatrix} A matrix with all possible capture histories, other than those equal to or containing non-overlapping pairs
+     indexed by parameters
+ that are within the model specified by \code{mX}.  A non-overlapping pair is a pair of lists \eqn{(i,j)} such that
+ no case is observed in both lists,
  regardless of whether it is present on any other lists.   If \eqn{(i,j)} is within the model specified by \code{mX},
  all capture histories containing both \eqn{i} and \eqn{j} are
  then excluded.
 
-\code{modelform} The model formula suitable to be called by the Generalized Linear Model function \code{glm}.
+\code{modelform} The model formula suitable to be called by the Generalized Linear Model function \code{glm}. Model terms corresponding to
+non-overlapping pairs are not included, because they are handled by removing appropriate rows from the data matrix supplied to glm. The list
+of non-overlapping pairs are provided in \code{emptyoverlaps}. See Chan, Silverman and Vincent (2019) for details.
 
-\code{emptyoverlaps} A matrix with two rows, whose columns give the indices of pairs of lists for which there are empty overlaps and where
+\code{emptyoverlaps} A matrix with two rows, whose columns give the indices of non-overlapping pairs of lists where the parameter indexed by
 the pair is within the specified model. The column names give the names of the lists
 corresponding to each pair.
 }
@@ -40,5 +44,16 @@ For multiple systems estimation model corresponding to a specified set of two-li
 \examples{
 data(NewOrl)
 buildmodel(NewOrl, mX=NULL)
+#Build a matrix that contains all two-list effects
+m=dim(Artificial_3)[2]-1
+mX = t(expand.grid(1:m, 1:m)); mX = mX[ , mX[1,]<mX[2,]]
+# With one two-list effect
+buildmodel(NewOrl, mX=mX[,1])
+#With three two-list effects
+buildmodel(NewOrl, mX=mX[,1:3])
 
+}
+\references{
+Chan, L., Silverman, B. W., and Vincent, K. (2019).
+ Multiple Systems Estimation for Sparse Capture Data: Inferential Challenges when there are Non-Overlapping Lists. Available from \url{https://arxiv.org/abs/1902.05156}.
 }

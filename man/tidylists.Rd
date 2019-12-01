@@ -4,28 +4,29 @@
 \alias{tidylists}
 \title{Produce a data matrix with a unique row for each capture history}
 \usage{
-tidylists(zdat, includezerocounts = F)
+tidylists(zdat, includezerocounts = FALSE)
 }
 \arguments{
 \item{zdat}{Data matrix with \eqn{t+1} columns. The first \eqn{t} columns, each corresponding to a particular list,
 are 0s and 1s defining the capture histories
 observed. The last column is the count of cases with that particular capture history.
 List names A, B, ... are constructed if not supplied. Where a capture history is not explicitly listed,
-it is assumed that it has observed count zero.}
+it is assumed that it has zero count.}
 
-\item{includezerocounts}{If \code{F} then remove rows corresponding to capture histories with zero count.
-If \code{T} then include all possible capture histories including those with zero count,
+\item{includezerocounts}{If \code{FALSE} then remove rows corresponding to capture histories with zero count.
+If \code{TRUE} then include all possible capture histories including those with zero count,
 excluding the all-zero row corresponding to the dark figure.}
 }
 \value{
-A data matrix in the form specified above, including all capture histories with zero counts if  \code{includezerocounts=T}.
+A data matrix in the form specified above, including all capture histories with zero counts if  \code{includezerocounts=TRUE}.
 }
 \description{
 This routine finds rows with the same capture history and consolidates them into a single row whose count is the sum of counts of
-the relevant rows.  If \code{includezerocounts = T} then it also includes rows for all the capture histories with zero counts; otherwise
+the relevant rows.  If \code{includezerocounts = TRUE} then it also includes rows for all the capture histories with zero count; otherwise
 these are all removed.
 }
 \examples{
 data(NewOrl)
 zdat<-tidylists(NewOrl,includezerocounts=TRUE)
+
 }

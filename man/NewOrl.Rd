@@ -9,13 +9,14 @@
 NewOrl
 }
 \description{
-Victims related to modern slavery and human trafficking in New Orleans
+Victims related to human trafficking in Greater New Orleans
 }
 \details{
-These data are collected into 8 lists.  For reasons of confidentiality the labels of the lists are anonymised.
- Fuller details are given in Bales, Murphy and Silverman (2018).
+These data are collected into 8 lists.  For reasons of confidentiality the lists are only labelled as A, B, ..., H.
+ Full details are given in Bales, Murphy and Silverman (2019).
 }
 \references{
-K. Bales, L. Murphy and B. W. Silverman (2018). How many trafficked and enslaved people are there in New Orleans? Available from \url{https://tinyurl.com/ybfb9tg6}.
+K. Bales, L. Murphy and B. W. Silverman (2019). How many trafficked people are there in Greater New Orleans?
+\emph{Journal of Human Trafficking, to appear}.
 }
 \keyword{datasets}

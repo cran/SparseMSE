@@ -2,44 +2,45 @@
 % Please edit documentation in R/routines.R
 \name{modelfit}
 \alias{modelfit}
-\title{Fit a specified model to Multiple Systems Estimation data}
+\title{Fit a specified model to multiple systems estimation data}
 \usage{
-modelfit(zdat, mX = NULL, check = T)
+modelfit(zdat, mX = NULL, check = TRUE)
 }
 \arguments{
 \item{zdat}{Data matrix with \eqn{t+1} columns. The first \eqn{t} columns, each corresponding to a particular list,
 are 0s and 1s defining the capture histories
 observed. The last column is the count of cases with that particular capture history.
 List names A, B, ... are constructed if not supplied. Where a capture history is not explicitly listed,
-it is assumed that it has observed count zero.}
+it is assumed that it has zero count.}
 
-\item{mX}{A \eqn{2 \times k} matrix giving the \eqn{k} two-list interactions to be included in the model.
+\item{mX}{A \eqn{2 \times k} matrix giving the \eqn{k} two-list parameters to be included in the model.
 Each column of \code{mX} contains the numbers of the corresponding pair of lists.
-If \code{mX = 0}, then all two-list interactions are included. If \code{mX = NULL}, no interactions are included and
+If \code{mX = 0}, then all two-list parameters are included. If \code{mX = NULL}, no two-list parameters are included and
  the main effects model is fitted.
-If only one interaction is to be fitted, it may be specified as a vector of length 2, e.g \code{mX=c(1,3)}
-for interactions of list 1 and 3.}
+If only one two-list parameter is to be fitted, it may be specified as a vector of length 2, e.g \code{mX=c(1,3)}
+for the parameter corresponding to lists 1 and 3.}
 
-\item{check}{If \code{check = T} check first of all if the maximum likelihood
+\item{check}{If \code{check = TRUE} check first of all if the maximum likelihood
 estimate exists and is identifiable, using the routine \code{\link{checkident}}.  If either condition fails, print an appropriate error message
 and return the error code.}
 }
 \value{
-A list of components as below
+A list with components as below
 
 \code{fit} Details of the fit of the specified model as output by \code{glm}.  The Akaike information criterion is adjusted to take account
-  of the number of parameters corresponding to empty overlaps.
+  of the number of parameters corresponding to non-overlapping pairs.
 
 \code{emptyoverlaps} Matrix with two rows, giving the list pairs within the model for which no cases are observed in common.
   Each column gives the indices of a pair of lists, with the names of the lists in the column name.
 
-\code{poisspempty} the Poisson p-values of the empty overlaps.
+\code{poisspempty} the Poisson p-values of the parameters corresponding to non-overlapping pairs.
 }
 \description{
-This routine fits a specified model to multiple systems estimation data, taking account of the possibility of empty overlaps between observed lists.
+This routine fits a specified model to multiple systems estimation data, taking account of the possibility of empty overlaps between
+ pairs of observed lists.
 }
 \examples{
 data(NewOrl)
-modelfit(NewOrl,c(1,3), check=TRUE)
+modelfit(NewOrl,mX= c(1,3), check=TRUE)
 
 }

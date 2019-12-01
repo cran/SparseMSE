@@ -9,14 +9,18 @@
 Artificial_3
 }
 \description{
-This is a simple data set based on three lists, which shows that there is not necessarily any clear hierarchical
- relationship between models that fail on one or the other of the criteria tested by \code{\link{checkident}}.
+This is a simple data set based on three lists, which gives examples of models that
+ fail on one or the other of the criteria tested by \code{\link{checkident}}. This is Table 2 in Chan, Silverman and Vincent (2019).
 }
 \details{
-If all three interactions are included in the fitted model then then the linear program
+If all three two-list effects are included in the fitted model then the linear program
 in \code{\link{checkident}} yields a strictly positive value but the matrix A is not of full column rank, so the parameters are not identifiable.
 If the model contains AB either alone or in conjunction with one of AC and BC, then the linear program result is zero, so the MLE does not exist.
 If only main effects are considered, or if either or both of AC and BC, but not AB are included,
 then the model passes both tests.
+}
+\references{
+Chan, L., Silverman, B. W., and Vincent, K. (2019).
+ Multiple Systems Estimation for Sparse Capture Data: Inferential Challenges when there are Non-Overlapping Lists. Available from \url{https://arxiv.org/abs/1902.05156}.
 }
 \keyword{datasets}

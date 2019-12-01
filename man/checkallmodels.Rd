@@ -2,37 +2,55 @@
 % Please edit documentation in R/routines.R
 \name{checkallmodels}
 \alias{checkallmodels}
-\title{Check all possible models}
+\title{Check all possible models for existence and identifiability}
 \usage{
-checkallmodels(zdata, verbose = F)
+checkallmodels(zdat, nreport = 1024)
 }
 \arguments{
-\item{zdata}{Data matrix with \eqn{t+1} columns. The first \eqn{t} columns, each corresponding to a particular list,
+\item{zdat}{Data matrix with \eqn{t+1} columns. The first \eqn{t} columns, each corresponding to a particular list,
 are 0s and 1s defining the capture histories
 observed. The last column is the count of cases with that particular capture history.
 List names A, B, ... are constructed if not supplied. Where a capture history is not explicitly listed,
-it is assumed that it has observed count zero.}
+it is assumed that it has zero count.}
 
-\item{verbose}{Specifies whether all possible models are listed in the output, or only those which generate a non-zero error code.}
+\item{nreport}{A message is printed for every \code{nreport} models checked.
+It gives the number of top level models to be checked altogether, and also the number of models found so far for which the estimate does not exist.}
 }
 \value{
-If \code{verbose=F}, it gives a matrix each of whose rows specifies a model, with last entry equal to the error code.  Only those models yielding a non-zero error code are included, so if no models lead to an error the matrix is empty. Each of the first \eqn{t(t-1)/2} columns corresponds to a pair of lists, and for each row, presence in or absence from the corresponding model is indicated by the value 1 or 0 respectively.
+The routine prints a message if the model with all two-list parameters is not identifiable.   As set out above, it gives regular progress reports in
+ the case where there are a large number of models to be checked.
 
-If \code{verbose=T}, it gives the full matrix of models together with the error codes they generate.
+If all models give estimates which exist, then a message is printed to that effect.
+
+If there are models for which the estimate does not exist, the routine reports the number of such models and returns a
+  matrix whose rows give the parameters included in them.
 }
 \description{
-This routine checks every possible model for existence and identifiability of the maximum likelihood estimates.
+This routine efficiently checks whether every possible model
+ satisfies the conditions for the existence and identifiability of an extended maximum likelihood estimate.
+  For identifiability it
+is only necessary to check the model containing all two-list effects.   For existence, the approach set out in Chan, Silverman and Vincent (2019)
+is used. This uses the linear programming approach described in a more general and abstract context by Fienberg and Rinaldo (2012).
 }
 \details{
-The routine calls the routine \code{\link{checkident}} for every model.
- If there are \eqn{t} lists then there are \eqn{t(t-1)/2} pairs of lists, and hence \eqn{2^{t(t-1)/2}} possible models, because
-  the models correspond to subsets of the set of all pairs of lists.   If \eqn{t = 7} there are 2,097,152 models to check, which would take
-  several hours.   If \eqn{t} is equal to 8 or more, the routine terminates with a statement of the number of models and an explanation that
-  checking all of these is not possible in a reasonable time.
+If the extended maximum likelihood estimator exists for a particular model, then it will still exist if one or more overlapping pairs are removed from the model.   This allows the search to be carried out efficiently, as follows:
+
+1. Search over `top-level' models which contain all overlapping pairs.  The number of such models is \eqn{2^k}, where \eqn{k} is the number of non-overlapping pairs, because there are \eqn{2^k} possible choices of the set of non-overlapping pairs to include in the model.
+
+2. For each top-level model, if the estimate exists there is no need to consider that model further.  If the estimate does not exist, then a branch search is carried out over the tree structure obtained by successively leaving out overlapping pairs.
 }
 \examples{
 data(Artificial_3)
 data(Western)
-checkallmodels(Artificial_3, verbose= TRUE)
+checkallmodels(Artificial_3)
 checkallmodels(Western)
+
+}
+\references{
+Chan, L., Silverman, B. W., and Vincent, K. (2019).
+ Multiple Systems Estimation for Sparse Capture Data: Inferential Challenges when there are Non-Overlapping Lists.
+  Available from \url{https://arxiv.org/abs/1902.05156}.
+
+Fienberg, S. E. and Rinaldo, A. (2012). Maximum likelihood estimation in log-linear
+models. \emph{Ann. Statist.} \strong{40}, 996-1023.  Supplementary material: Technical report, Carnegie Mellon University. Available from \url{http://www.stat.cmu.edu/~arinaldo/Fienberg_Rinaldo_Supplementary_Material.pdf}.
 }

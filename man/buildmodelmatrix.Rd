@@ -11,11 +11,11 @@ buildmodelmatrix(zdat, mX = NULL)
 are 0s and 1s defining the capture histories
 observed. The last column is the count of cases with that particular capture history.
 List names A, B, ... are constructed if not supplied. Where a capture history is not explicitly listed,
-it is assumed that it has observed count zero.}
+it is assumed that it has zero count.}
 
-\item{mX}{A \eqn{2 \times k} matrix giving the \eqn{k} two-list interactions to be included in the model.
+\item{mX}{A \eqn{2 \times k} matrix giving the \eqn{k} two-list parameters to be included in the model.
 Each column of \code{mX} contains the numbers of the corresponding pair of lists.
-If \code{mX = 0}, then all two-list interactions are included. If \code{mX = NULL}, no interactions are included and
+If \code{mX = 0}, then all two-list parameters are included. If \code{mX = NULL}, no such parameters are included and
  the main effects model is fitted.}
 }
 \value{
@@ -25,7 +25,7 @@ A list with components as below
    of the counts of capture histories that do not contain non-overlapping pairs in the data.
 
 \code{tvec} A vector indexed by the parameters in the model, excluding those corresponding to non-overlapping pairs of lists.  For each parameter
-   the vector contains the total count of individuals in all the capture histories that dominate that parameter.
+   the vector contains the total count of individuals in all the capture histories that include both the lists indexed by that parameter.
 
 \code{rankdef} The column rank deficiency of the matrix \code{modmat}. If \code{rankdef = 0}, the matrix has full column rank.
 }

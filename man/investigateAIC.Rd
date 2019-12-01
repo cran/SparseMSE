@@ -9,7 +9,7 @@ investigateAIC(nsim = 10000, Nsamp = 1000, seed = 1001)
 \arguments{
 \item{nsim}{The number of simulation replications}
 
-\item{Nsamp}{The expected value of the total population within each simulation}
+\item{Nsamp}{The expected value of the total population size within each simulation}
 
 \item{seed}{The random number seed}
 }
@@ -17,16 +17,17 @@ investigateAIC(nsim = 10000, Nsamp = 1000, seed = 1001)
 An \code{nsim} \eqn{\times} 2 matrix giving the changes in deviance for each replication for each of the two models.
 }
 \description{
-This routine produces Figure 1 of Chan, Silverman and Vincent (2019).
+This routine reproduces Figure 1 of Chan, Silverman and Vincent (2019).
 }
 \details{
 Simulations are carried out for two different three-list models.
   In one model, the probabilities of capture are 0.01, 0.04 and 0.2 for the three lists respectively, while in the other the probability
-  is 0.3 on all three lists.  In both cases, there are no interaction
-  effects, so that captures on the lists occur independently of each other.
+  is 0.3 on all three lists.  In both cases,
+  captures on the lists occur independently of each other,
+  so there are no two-list effects.
   The first model is chosen to be somewhat more typical of the sparse capture
   case, of the kind which often occurs in the human trafficking context,
-  while the second is a more classical multiple systems estimate.
+  while the second, more reminiscent of a classical mark-recapture study.
 
 The probability of an individual having each possible capture history is first evaluated.
   Then these probabilities are multiplied by \code{Nsamp = 1000} and, for each simulation
@@ -34,8 +35,9 @@ The probability of an individual having each possible capture history is first e
   to give a full set of observed capture histories;
   together with the null capture history the expected number of counts
   (population size) is equal to \code{Nsamp}.
-Inference was carried out both for the model with main effects only, and for the model with the addition of an interaction effect between the first two lists.
-The reduction in deviance between the two models was determined.
+Inference was carried out both for the model with main effects only, and for the model with the addition of
+  a correlation effect between the first two lists.
+The reduction in deviance between the two models was determined. Ten thousand simulations were carried out.
 
 Checking for compliance with the conditions for existence and identifiability of the
 estimates shows that a very small number of the simulations for the sparse model (two out of
@@ -50,5 +52,5 @@ The routine produces QQ-plots
 }
 \references{
 Chan, L., Silverman, B. W., and Vincent, K. (2019).
- Multiple systems estimation for Sparse Capture Data: Inferential Challenges when there are Non-Overlapping Lists. Available from \url{https://arxiv.org/abs/1902.05156}.
+ Multiple Systems Estimation for Sparse Capture Data: Inferential Challenges when there are Non-Overlapping Lists. Available from \url{https://arxiv.org/abs/1902.05156}.
 }
