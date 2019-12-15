@@ -1,6 +1,6 @@
 Package: SparseMSE
 Title: 'Multiple Systems Estimation for Sparse Capture Data'
-Version: 2.0.0
+Version: 2.0.1
 Authors@R: c(
   person("Lax", "Chan", email = "laxchan77@gmail.com", role = c("aut","cre")),
   person("Bernard", "Silverman", email = "mail@bernardsilverman.co.uk", role = c("aut")),
@@ -19,6 +19,6 @@ RoxygenNote: 6.1.1
 Suggests: knitr, rmarkdown
 Imports: lpSolve, Rcapture
 NeedsCompilation: no
-Packaged: 2019-12-01 18:12:02 UTC; Lax
+Packaged: 2019-12-15 12:17:40 UTC; Lax
 Repository: CRAN
-Date/Publication: 2019-12-01 21:20:07 UTC
+Date/Publication: 2019-12-15 12:30:02 UTC

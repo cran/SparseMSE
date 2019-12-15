@@ -432,27 +432,44 @@ estimatepopulation.0 <-function(zdat,method="stepwise", quantiles=c(0.025,0.975)
 #'
 #' @export
 
-modelfit <- function(zdat, mX=NULL, check = TRUE) {
-  #--- perform check if asked for
+modelfit = function (zdat, mX = NULL, check = TRUE){
   if (check) {
     zcheck = checkident(zdat, mX, verbose = TRUE)
-    if (zcheck$ierr > 0) return(zcheck$ierr)
+    if (zcheck$ierr > 0) 
+      return(zcheck$ierr)
   }
   zz = buildmodel(zdat, mX)
   eo = zz$emptyoverlaps
-  nover= dim(eo)[2]
-  fit = glm(zz$modelform, family=poisson, data=zz$datamatrix, x=TRUE)
-  fit$aic = fit$aic + 2*nover
-  #----------deal with empty overlaps if necessary
-  probzero = vector("numeric",nover)
+  nover = dim(eo)[2]
+  fit = glm(zz$modelform, family = poisson, data = zz$datamatrix, x = TRUE)
+  fit$aic = fit$aic + 2 * nover
+  #
+  # find the probabilities of each observed empty overlap in the model being empty, given a model excluding that parameter.
+  probzero = NULL
   if (nover > 0) {
+    probzero= vector("numeric", nover)
+    m = dim(zdat)[2]-1
+    if (sum(mX) == 0) {
+      mX = t(expand.grid(1:m, 1:m))
+      mX = mX[, mX[1, ] < mX[2, ]]
+    }
+    if (is.vector(mX)) mX= as.matrix(mX, ncol=1)
     names(probzero) = dimnames(eo)[[2]]
     for (iover in (1:nover)) {
-      lambda = sum(fit$coefficients[c(1,1 + eo[,iover])])
-      probzero[iover] = exp( -exp(lambda))
+      # for each empty overlap, remove that parameter from the model and fit the model without it
+      jeocol = (1:dim(mX)[2]) [ mX[1,]==eo[1,iover] & mX[2,]==eo[2,iover]]
+      mX1 = mX[,-jeocol]
+      if (length(mX1)==0) mX1=NULL
+      zz1 = buildmodel(zdat, mX1)
+      zfit = glm(zz1$modelform, family=poisson, data=zz1$datamatrix, x=TRUE)
+      #  now calculate the estimated probability that the given overlap is empty, summing over all relevant cells
+      pred0 = predict(zfit)
+      dat0 = zfit$data
+      lambdastar = sum(exp(pred0) * dat0[, eo[1,iover]] * dat0[, eo[2,iover]])
+      probzero[iover] = exp(-lambdastar)
     }
   }
-  return( list (fit=fit, emptyoverlaps = eo, poisspempty = probzero))
+  return(list(fit = fit, emptyoverlaps = eo, poisspempty = probzero))
 }
 
 #'Stepwise fit using Poisson p-values.
